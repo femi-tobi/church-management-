@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Instrument Management System</title>
+  <link href="/style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <img src="https://yt3.ggpht.com/a/AATXAJyIPbSL8WTqePr5nKptXU5ztEuEjCg2eEWonQ=s900-c-k-c0xffffffff-no-rj-mo" alt="Deeper Life Logo" class="logo" />
+    <h1 class="main-title">Church Instrument Management System</h1>
+    <!-- Division & Chorister Selection -->
+    <section id="division-chorister-section" class="section">
+      <h2 class="section-title">Chorister Selection</h2>
+      <div class="row">
+        <div class="col">
+          <label for="division">Division</label>
+          <select id="division">
+            <option value="">Select Division</option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="chorister">Chorister Name</label>
+          <select id="chorister">
+            <option value="">Select Name</option>
+          </select>
+        </div>
+      </div>
+    </section>
+    <!-- Instrument Checkout -->
+    <section id="checkout-section" class="section">
+      <h2 class="section-title">Instrument Checkout</h2>
+      <div class="row">
+        <div class="col">
+          <label for="instrument-type">Instrument Type</label>
+          <select id="instrument-type">
+            <option value="">Select Type</option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="instrument-number">Instrument Number/ID</label>
+          <select id="instrument-number">
+            <option value="">Select Number</option>
+          </select>
+        </div>
+      </div>
+      <button id="signout-btn" class="btn btn-primary">Sign Out Instrument</button>
+    </section>
+    <!-- Instrument Check-in -->
+    <section id="checkin-section" class="section">
+      <h2 class="section-title">Instrument Check-in</h2>
+      <div class="row">
+        <div class="col">
+          <label for="return-instrument">Instrument to Return</label>
+          <select id="return-instrument">
+            <option value="">Select Instrument</option>
+          </select>
+        </div>
+      </div>
+      <button id="signin-btn" class="btn btn-success">Sign In Instrument</button>
+      <div id="condition-modal" class="modal hidden">
+        <div class="modal-content">
+          <h3>What is the condition of the returned instrument?</h3>
+          <div class="modal-buttons">
+            <button class="condition-btn btn btn-good" data-condition="Good">Good Condition ✅</button>
+            <button class="condition-btn btn btn-warning" data-condition="Faulty">Faulty ⚠️</button>
+            <button class="condition-btn btn btn-danger" data-condition="Damaged">Damaged ❌</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Logs/Search -->
+    <section id="logs-section" class="section">
+      <h2 class="section-title">Instrument Logs</h2>
+      <div class="row">
+        <input id="search-input" type="text" placeholder="Search by name, instrument, or division..." class="search-input" />
+        <button id="search-btn" class="btn btn-secondary">Search</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Division</th>
+              <th>Chorister Name</th>
+              <th>Instrument Type</th>
+              <th>Instrument Number</th>
+              <th>Sign Out Time</th>
+              <th>Sign In Time</th>
+              <th>Condition Returned</th>
+            </tr>
+          </thead>
+          <tbody id="logs-table-body">
+            <!-- Logs will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <script src="/main.js"></script>
+</body>
+</html>
