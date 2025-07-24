@@ -22,7 +22,9 @@ const initDb = () => {
     db.run(`CREATE TABLE IF NOT EXISTS logs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       division TEXT NOT NULL,
+      "group" TEXT,
       chorister_name TEXT NOT NULL,
+      phone TEXT,
       instrument_type TEXT NOT NULL,
       instrument_number TEXT NOT NULL,
       sign_out_time TEXT NOT NULL,
@@ -126,17 +128,25 @@ app.get('/api/instruments', (req, res) => {
 
 // Sign out instrument
 app.post('/api/signout', (req, res) => {
-  const { division, chorister_name, instrument_type, instrument_number } = req.body;
+  console.log('Signout request body:', req.body);
+  const { division, group, chorister_name, phone, instrument_type, instrument_number } = req.body;
   const signOutTime = new Date().toISOString();
-  db.serialize(() => {
-    db.run('INSERT INTO logs (division, chorister_name, instrument_type, instrument_number, sign_out_time) VALUES (?, ?, ?, ?, ?)',
-      [division, chorister_name, instrument_type, instrument_number, signOutTime],
-      function (err) {
-        if (err) return res.status(500).json({ error: err.message });
-        db.run('UPDATE instruments SET is_available = 0 WHERE number = ?', [instrument_number]);
-        res.json({ success: true });
-      }
-    );
+  db.get('SELECT is_available FROM instruments WHERE number = ?', [instrument_number], (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!row) return res.status(404).json({ error: 'Instrument not found.' });
+    if (row.is_available === 0) {
+      return res.status(400).json({ error: 'Instrument is already signed out! Please sign it in before signing out again.' });
+    }
+    db.serialize(() => {
+      db.run('INSERT INTO logs (division, "group", chorister_name, phone, instrument_type, instrument_number, sign_out_time) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [division, group, chorister_name, phone, instrument_type, instrument_number, signOutTime],
+        function (err) {
+          if (err) return res.status(500).json({ error: err.message });
+          db.run('UPDATE instruments SET is_available = 0 WHERE number = ?', [instrument_number]);
+          res.json({ success: true });
+        }
+      );
+    });
   });
 });
 
