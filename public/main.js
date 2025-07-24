@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const logsTableBody = document.getElementById('logs-table-body');
   const searchInput = document.getElementById('search-input');
   const searchBtn = document.getElementById('search-btn');
+  const groupSelect = document.getElementById('group');
+  const phoneInput = document.getElementById('phone');
 
   let lastSignInInstrument = null;
 
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 
+  // Remove static instrument list and fallback logic
   // Fetch and populate instrument types
   fetch('/api/instrument-types')
     .then(res => res.json())
@@ -62,13 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 
+  // Remove groupToDistricts and districtSelect logic
+
   // Sign out instrument
   signoutBtn.addEventListener('click', () => {
     const division = divisionSelect.value;
+    const group = groupSelect.value;
     const chorister = choristerSelect.value;
+    const phone = phoneInput.value;
     const type = instrumentTypeSelect.value;
     const number = instrumentNumberSelect.value;
-    if (!division || !chorister || !type || !number) {
+    if (!division || !group || !chorister || !phone || !type || !number) {
       alert('Please fill all fields to sign out an instrument.');
       return;
     }
@@ -77,7 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         division,
+        group,
         chorister_name: chorister,
+        phone,
         instrument_type: type,
         instrument_number: number
       })

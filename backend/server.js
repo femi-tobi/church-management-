@@ -34,6 +34,26 @@ const initDb = () => {
 
 initDb();
 
+// Instrument list and quantities
+const instrumentList = [
+  { type: 'Violin', quantity: 40 },
+  { type: 'Viola', quantity: 10 },
+  { type: 'Cielo', quantity: 6 },
+  { type: 'Double bass', quantity: 5 },
+  { type: 'Flute', quantity: 10 },
+  { type: 'Clarinet', quantity: 10 },
+  { type: 'Alto sax', quantity: 5 },
+  { type: 'Soprano sax', quantity: 5 },
+  { type: 'Tenor sax', quantity: 5 },
+  { type: 'Trombone', quantity: 6 },
+  { type: 'Euphorium', quantity: 4 },
+  { type: 'Tuba', quantity: 3 },
+  { type: 'French Horn', quantity: 3 },
+  { type: 'Keyboard', quantity: 1 },
+  { type: 'Trumpet', quantity: 10 },
+  { type: 'Harp', quantity: 1 }
+];
+
 // Helper: Insert sample data if empty
 const insertSampleData = () => {
   db.get('SELECT COUNT(*) as count FROM choristers', (err, row) => {
@@ -53,20 +73,16 @@ const insertSampleData = () => {
       });
     }
   });
-  db.get('SELECT COUNT(*) as count FROM instruments', (err, row) => {
-    if (row.count === 0) {
-      const instruments = [
-        ['Keyboard', 'KB-001'],
-        ['Keyboard', 'KB-002'],
-        ['Drum Set', 'DR-001'],
-        ['Guitar', 'GT-001'],
-        ['Microphone', 'MC-001'],
-        ['Microphone', 'MC-002']
-      ];
-      instruments.forEach(([type, number]) => {
-        db.run('INSERT INTO instruments (type, number) VALUES (?, ?)', [type, number]);
-      });
-    }
+  // Remove all instruments and re-insert from instrumentList
+  db.run('DELETE FROM instruments', [], (err) => {
+    if (err) return;
+    instrumentList.forEach(({ type, quantity }) => {
+      for (let i = 1; i <= quantity; i++) {
+        // Pad number with zeros for uniformity
+        const number = `${type.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '')}-${String(i).padStart(3, '0')}`;
+        db.run('INSERT INTO instruments (type, number, is_available) VALUES (?, ?, 1)', [type, number]);
+      }
+    });
   });
 };
 insertSampleData();
