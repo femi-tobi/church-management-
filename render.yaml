@@ -3,8 +3,8 @@ services:
     name: church-management
     env: node
     plan: free
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && node server.js
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
