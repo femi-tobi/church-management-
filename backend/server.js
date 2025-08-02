@@ -9,7 +9,7 @@ const {
   commitTransaction 
 } = require('./config');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Instrument list and quantities
 const instrumentList = [
